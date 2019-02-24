@@ -17,6 +17,8 @@ class MoviesController < ApplicationController
       ordering,@title_header = {:title => :asc}, 'hilite'
     when 'release_date'
       ordering,@date_header = {:release_date => :asc}, 'hilite'
+    when 'director'
+      ordering,@director_header = {:director => :asc}, 'hilite'
     end
     @all_ratings = Movie.all_ratings
     @selected_ratings = params[:ratings] || session[:ratings] || {}
@@ -59,6 +61,19 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+  
+  def director
+    @movie = Movie.find(params[:id])
+    @director = @movie.director
+    
+    if @director.blank?
+      flash[:warning] = "'#{@movie.title}' has no director info"
+      redirect_to movies_path and return
+    end
+    
+    @movies = @movie.same_director
+    
   end
 
 end

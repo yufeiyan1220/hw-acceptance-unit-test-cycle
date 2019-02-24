@@ -1,3 +1,5 @@
+require 'simplecov'
+SimpleCov.start 'rails'
 require 'rspec/core'
 
 RSpec.configure do |config|
